@@ -1,38 +1,153 @@
-.App {
+/* NaturalezaPage.css */
+
+/* Estilos generales */
+.naturaleza-page {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f5f5f5;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Navbar */
+.navbar {
+  background-color: #888888;
+  padding: 10px;
+  text-align: center;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.navbar h1 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 24px;
+  color: #fff;
+  margin: 0;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+/* Título de sección */
+h2 {
+  font-family: 'Press Start 2P', cursive;
+  font-size: 20px;
+  color: #aaa;
+  margin: 20px 0;
+}
+
+/* Contenedor de productos */
+.productos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
+  justify-items: center;
+  padding: 20px;
+}
+
+/* Tarjeta de producto */
+.producto-card {
+  background-color: #3c9d3c;
+  padding: 15px;
+  border-radius: 5px;
+  width: 180px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.producto-imagen {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.producto-nombre {
+  font-size: 16px;
+  color: #fff;
+  font-weight: bold;
+  margin: 5px 0;
+}
+
+.producto-precio {
+  font-size: 14px;
+  color: #fff;
+  margin: 0;
+}
+/* Estilos del botón "Agregar al carrito" */
+.boton-agregar {
+  background-color: #3c9d3c;
+  color: #333;
+  padding: 8px;
+  margin-top: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.boton-agregar:hover {
+  background-color: #ddd;
+}
+
+/* Estilos del carrito */
+.carrito {
+  margin-top: 30px;
+  background-color: #eee;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carrito h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.carrito ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.carrito li {
+  font-size: 16px;
+  color: #333;
+  margin: 5px 0;
+}
+/* Estilos para el botón morado */
+.boton-navegar-morado {
+  background-color: #800080; /* Color morado */
   color: white;
+  border: none;
+  padding: 10px 20px;
+  margin-bottom: 20px; /* Espacio inferior para separarlo de los productos */
+  font-size: 16px;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s;
 }
 
-.App-link {
-  color: #61dafb;
+.boton-navegar-morado:hover {
+  background-color: #5a005a; /* Color morado oscuro al pasar el cursor */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+/* Estilos para la disposición en grid */
+.productos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  align-items: start;
 }
+
+.producto-card {
+  width: 150px; /* Ancho de cada tarjeta de producto */
+  text-align: center;
+}
+
+.boton-agregar {
+  background-color: #4CAF50; /* Color verde para "Agregar al carrito" */
+  color: white;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.boton-agregar:hover {
+  background-color: #45a049;
+}
+
