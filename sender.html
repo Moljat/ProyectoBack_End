@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo de websocket</title>
+</head>
+<body>
+    <h1>Ejemplo de websocket</h1>
+    <input id="messageInput" type="text" placeholder="Escribe tu mensaje...">
+    <button onclick="mandarMensaje()">Mandar mensaje</button>
+
+    <script>
+        // Código de conexión websocket
+        const socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+
+        socket.onopen = function () {
+            console.log('Conexión abierta:');
+        };
+
+        
+
+        socket.onclose = function () {
+            console.log('Conexión cerrada:');
+        };
+
+        function mandarMensaje() {
+            const texto= document.getElementById('messageInput');
+            const mensaje = texto.value;
+            socket.send(JSON.stringify({ mensaje: mensaje }));
+            texto.value = '';
+        }
+
+    </script>
+</body>
+</html>

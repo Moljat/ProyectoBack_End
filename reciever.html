@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Receptor websocket</title>
+</head>
+<body>
+    <h1>Receptor websocket</h1>
+    <div id="messageDisplay">Esperando mensaje...</div>
+
+    <script>
+        // Código de conexión websocket
+        const socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+
+        socket.onmessage = function (event) {
+            const data = JSON.parse(event.data);
+            const mensaje = data.mensaje;
+            const mensajemostrado = document.getElementById('messageDisplay');
+            mensajemostrado.innerText=mensaje;
+        };
+
+
+        socket.onopen = function () {
+            console.log('Conexión abierta:');
+        };
+
+        
+
+        socket.onclose = function () {
+            console.log('Conexión cerrada:');
+        };
+
+        function mandarMensaje() {
+            const texto= document.getElementById('messageInput');
+            const mensaje = texto.value;
+            socket.send(JSON.stringify({ mensaje: mensaje }));
+            texto.value = '';
+        }
+    </script>
+</body>
+</html>
