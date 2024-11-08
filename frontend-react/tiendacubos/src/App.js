@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import NaturalezaPage from './NaturalezaPage';
+import AgregarModificar from './AgregarModificar';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        {/* Ruta principal que muestra NaturalezaPage */}
+        <Route path="/" element={<NaturalezaPage />} />
+
+        {/* Ruta secundaria que muestra AgregarModificar */}
+        <Route path="/agregar-modificar" element={<AgregarModificar />} />
+      </Routes>
+    </Router>
   );
 }
 
