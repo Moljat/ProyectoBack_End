@@ -29,11 +29,6 @@ const NaturalezaPage = () => {
       <h2>Naturaleza</h2>
 
       <div className="productos-grid">
-        {/* Botón de navegación en color morado */}
-        <Link to="/agregar-modificar">
-          <button className="boton-navegar-morado">Ir a Agregar/Modificar Cubo</button>
-        </Link>
-
         {/* Productos */}
         {productos.map((producto, index) => (
           <div key={index} className="producto-card">
@@ -41,10 +36,19 @@ const NaturalezaPage = () => {
             <p className="producto-nombre">{producto.nombre}</p>
             <p className="producto-precio">${producto.precio.toFixed(2)}</p>
             <button className="boton-agregar" onClick={() => agregarAlCarrito(producto)}>
-              Agregar al carrito
+              Agregar al carrito {/* Este botón conserva su texto normal */}
             </button>
           </div>
         ))}
+
+        {/* Botón de navegación en color morado con ícono de más */}
+        <div className="producto-card boton-morado-card">
+          <Link to="/agregar-modificar">
+            <button className="boton-navegar-morado">
+              <img src="signomas.png" alt="Ir a Agregar/Modificar" className="icono-mas" />
+            </button>
+          </Link>
+        </div>
       </div>
 
       <div className="carrito">
