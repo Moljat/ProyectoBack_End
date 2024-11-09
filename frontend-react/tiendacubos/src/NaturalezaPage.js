@@ -1,47 +1,90 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'; // Importa Link para la navegación
 import './App.css';
+import { useProducto } from './ProductoContext';
 
-const productos = [
-  { nombre: 'Mena de carbon', precio: 30.0, imagen: 'imagen_carbon.png' },
-  { nombre: 'Mena de cobre', precio: 50.0, imagen: 'imagen_cobre.png' },
-  { nombre: 'Mena de hierro', precio: 100.0, imagen: 'imagen_hierro.png' },
-  { nombre: 'Mena de oro', precio: 70.0, imagen: 'imagen_oro.png' },
-  { nombre: 'Mena de redtone', precio: 80.0, imagen: 'imagen_redtone.png' },
-  { nombre: 'Mena de lapislazuli', precio: 55.5, imagen: 'imagen_lapislazuli.png' },
-  { nombre: 'Mena de esmeralda', precio: 200.0, imagen: 'imagen_esmeralda.png' },
-  { nombre: 'Mena de diamante', precio: 500.0, imagen: 'imagen_diamante.png' },
+
+
+const productosFijos = [
+  { id: 0, nombre: 'Mena de carbon', precio: 30.0, imagen: 'imagen_carbon.png' },
+  { id: 0, nombre: 'Mena de cobre', precio: 50.0, imagen: 'imagen_cobre.png' },
+  { id: 0, nombre: 'Mena de hierro', precio: 100.0, imagen: 'imagen_hierro.png' },
+  { id: 0, nombre: 'Mena de oro', precio: 70.0, imagen: 'imagen_oro.png' },
+  { id: 0, nombre: 'Mena de redstone', precio: 80.0, imagen: 'imagen_redstone.png' },
+  { id: 0, nombre: 'Mena de lapislazuli', precio: 55.5, imagen: 'imagen_lapislazuli.png' },
+  { id: 0, nombre: 'Mena de esmeralda', precio: 200.0, imagen: 'imagen_esmeralda.png' },
+  { id: 0, nombre: 'Mena de diamante', precio: 500.0, imagen: 'imagen_diamante.png' },
 ];
 
 const NaturalezaPage = () => {
+  const [productos, setProductos] = useState(productosFijos); // Productos iniciales
   const [carrito, setCarrito] = useState([]);
+  const { setProductoSeleccionado } = useProducto();
+
 
   const agregarAlCarrito = (producto) => {
     setCarrito([...carrito, producto]);
   };
+
+ 
+  
+  useEffect(() => {
+    async function fetchProductos() {
+      try {
+        const response = await fetch('http://localhost:3001/api/productos');
+        const nuevosProductos = await response.json();
+        
+        // Combina los productos fijos con los nuevos de la API
+        setProductos((prevProductos) => [
+          ...prevProductos,
+          ...nuevosProductos.map((producto) => ({
+            ...producto, // Mantiene las propiedades existentes
+            imagen: producto.imagen || 'cubo_default.png', // Asigna la imagen por defecto si no tiene una
+          }))
+        ]);
+      } catch (error) {
+        console.error('Error al obtener los productos:', error);
+      }
+    }
+  
+    fetchProductos();
+  }, []);
+
+  
 
   return (
     <div className="naturaleza-page">
       <div className="navbar">
         <h1>Tienda de Cubos</h1>
       </div>
-
+  
       <h2>Naturaleza</h2>
-
-      <div className="productos-grid">
-        {/* Productos */}
+  
+            <div className="productos-grid">
         {productos.map((producto, index) => (
+          
           <div key={index} className="producto-card">
-            <img src={producto.imagen} alt={producto.nombre} className="producto-imagen" />
-            <p className="producto-nombre">{producto.nombre}</p>
-            <p className="producto-precio">${producto.precio.toFixed(2)}</p>
-            <button className="boton-agregar" onClick={() => agregarAlCarrito(producto)}>
-              Agregar al carrito {/* Este botón conserva su texto normal */}
+            
+            <Link to="/VerProducto" className="producto-link" onClick={() => setProductoSeleccionado(producto.id)} 
+            >
+              <img src={producto.imagen} alt={producto.nombre} className="producto-imagen" />
+              <p className="producto-nombre">{producto.nombre}</p>
+              <p className="producto-precio">
+                ${producto.precio && !isNaN(producto.precio) ? producto.precio.toFixed(2) : 'N/A'}
+              </p>
+            </Link>
+            <button className="boton-agregar" onClick={(e) => {
+              e.stopPropagation(); // Evitar que el clic en el botón dispare el evento del contenedor
+              agregarAlCarrito(producto);
+            }}>
+              Agregar al carrito
             </button>
           </div>
+          
         ))}
+        
 
-        {/* Botón de navegación en color morado con ícono de más */}
+       
         <div className="producto-card boton-morado-card">
           <Link to="/agregar-modificar">
             <button className="boton-navegar-morado">

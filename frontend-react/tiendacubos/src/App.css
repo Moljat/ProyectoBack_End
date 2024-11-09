@@ -10,12 +10,18 @@
 
 /* Navbar */
 .navbar {
-  background-color: #888888;
-  padding: 10px;
+  position: fixed;
+  width: 100%;
+  height: 100px;
+  top: 0%;
+  left: 0;
+  background-color: #4b4b4b;
+  color: #FFFFFF;
   text-align: center;
-  width: 100%; /* Se asegura de que ocupe todo el ancho disponible */
-  margin: 0; /* Elimina márgenes externos */
-  box-sizing: border-box; /* Incluye el padding en el cálculo del ancho */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.9);
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
 }
 
 .navbar h1 {
@@ -23,6 +29,7 @@
   font-size: 24px;
   color: #fff;
   margin: 0;
+  align-self: center;
 }
 
 /* Título de sección */
@@ -135,7 +142,7 @@ h2 {
 .producto-card.boton-morado-card {
   background-color: #800080; /* Color morado */
   padding: 0; /* Eliminar padding interno */
-  width: 180px;
+  width: 200px;
   height: auto; /* Permitir ajustar el contenido */
   border: none; /* Eliminar cualquier borde */
   box-shadow: none; /* Eliminar sombra */
@@ -145,3 +152,9 @@ h2 {
   height: 100px;
 }
 
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 80px;
+  background-color: #f5f5f5;
+}

@@ -5,7 +5,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 
 // Middleware
 app.use(cors());
@@ -52,7 +52,7 @@ app.post('/api/producto-nuevo', (req, res) => {
 
     console.log(newItem);
     // Aquí puedes acceder al "name"
-    const productName = newItem.name;
+    const productName = newItem.nombre;
 
     console.log("nombre: " + productName);
 
@@ -67,8 +67,8 @@ app.post('/api/producto-nuevo', (req, res) => {
     
 
     // Agregar valores predeterminados para descripción y precio
-    newItem.description = newItem.description ? newItem.description.trim() : 'Descripción no disponible';
-    newItem.price = newItem.price !== undefined ? parseFloat(newItem.price) : 0.00;
+    newItem.descripcion = newItem.descripcion? newItem.descripcion.trim() : 'Descripción no disponible';
+    newItem.precio= newItem.precio !== undefined ? parseFloat(newItem.precio) : 0.00;
 
     // Agregar el nuevo producto
     items.push(newItem);
