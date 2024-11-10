@@ -7,7 +7,7 @@ import json
 from channels.generic.websocket import WebsocketConsumer  
 
 class Consumidores(WebsocketConsumer):
-       # Mantiene un conjunto de clientes conectados
+    # Mantiene un conjunto de clientes conectados
     clientes = set()
 
     # Método que se ejecuta cuando un cliente se conecta
@@ -21,7 +21,6 @@ class Consumidores(WebsocketConsumer):
         # Añadir el cliente actual al conjunto de clientes conectados
         self.clientes.add(self)
         self.accept()
-
 
     # Método que se ejecuta cuando un cliente se desconecta
     def disconnect(self, close_code):
@@ -47,19 +46,29 @@ class Consumidores(WebsocketConsumer):
         - El método deserializa el mensaje recibido y lo distribuye a todos los clientes conectados.
         """
         try:
-        # Convertir el string JSON a un diccionario
+            # Convertir el string JSON a un diccionario
             datos_json = json.loads(text_data)
+            
+            # Verificar si el mensaje está presente en el JSON
+            mensaje = datos_json.get("mensaje", None)
+            
+            if mensaje is None:
+                self.send(text_data=json.dumps({
+                    'error': 'El campo "mensaje" no se encuentra en el JSON recibido.'
+                }))
+                return
 
-        # Extraer el mensaje del JSON
-            mensaje = datos_json["mensaje"]
-
-        # Recorrer todos los clientes conectados y enviarles el mensaje
+            # Recorrer todos los clientes conectados y enviarles el mensaje
             for cliente in self.clientes:
                 cliente.send(
-                # Enviar el mensaje de forma serializada en formato JSON
-                text_data=json.dumps({"mensaje": mensaje})
+                    # Enviar el mensaje de forma serializada en formato JSON
+                    text_data=json.dumps({"mensaje": mensaje})
                 )
-        except json.JSONDecodeError as e:
+        except json.JSONDecodeError:
             self.send(text_data=json.dumps({
-            'error': 'Error al decodificar el mensaje JSON.'
-        }))
+                'error': 'Error al decodificar el mensaje JSON.'
+            }))
+        except Exception as e:
+            self.send(text_data=json.dumps({
+                'error': f'Ocurrió un error: {str(e)}'
+            }))

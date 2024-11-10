@@ -2,40 +2,52 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Receptor websocket</title>
+    <title>Receptor WebSocket</title>
 </head>
 <body>
-    <h1>Receptor websocket</h1>
+    <h1>Receptor WebSocket</h1>
     <div id="messageDisplay">Esperando mensaje...</div>
+    <div id="productDisplay"></div> <!-- Div para mostrar el producto recibido -->
 
     <script>
-        // Código de conexión websocket
+        // Código de conexión WebSocket
         const socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
 
         socket.onmessage = function (event) {
             const data = JSON.parse(event.data);
-            const mensaje = data.mensaje;
-            const mensajemostrado = document.getElementById('messageDisplay');
-            mensajemostrado.innerText=mensaje;
-        };
+            console.log('Mensaje recibido:', data);
 
+            // Verificar si el mensaje contiene un texto simple o un producto
+            if (data.mensaje) {
+                // Si el mensaje es un texto simple
+                const mensaje = data.mensaje;
+                document.getElementById('messageDisplay').innerText = mensaje;
+            } else if (data.tipo === 'agregar_al_carrito' && data.producto) {
+                // Si el mensaje es un producto
+                const producto = data.producto;
+                mostrarProducto(producto);
+            }
+        };
 
         socket.onopen = function () {
             console.log('Conexión abierta:');
         };
 
-        
-
         socket.onclose = function () {
             console.log('Conexión cerrada:');
         };
 
-        function mandarMensaje() {
-            const texto= document.getElementById('messageInput');
-            const mensaje = texto.value;
-            socket.send(JSON.stringify({ mensaje: mensaje }));
-            texto.value = '';
+        function mostrarProducto(producto) {
+            // Mostrar el producto en el `productDisplay`
+            const productDisplay = document.getElementById('productDisplay');
+            productDisplay.innerHTML = `
+                <h3>Producto recibido:</h3>
+                <p>Nombre: ${producto.nombre}</p>
+                <p>Precio: $${producto.precio.toFixed(2)}</p>
+            `;
         }
-    </script>
-</body>
-</html>
+
+        function mandarMensaje() {
+            const texto = document.getElementById('messageInput');
+ 
+        }

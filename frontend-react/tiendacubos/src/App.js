@@ -1,9 +1,10 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import NaturalezaPage from './NaturalezaPage';
 import AgregarModificar from './AgregarModificar';
 import VerProducto from './VerProducto';
 import { ProductoProvider } from './ProductoContext';
+import CarritoCompras from './carritoCompras';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
 
 
         <Route path="/VerProducto" element={<VerProducto />} />
+
+        <Route path="/CarritoCompras" element={<CarritoCompras />} />
         
       </Routes>
     </Router>

@@ -18,12 +18,31 @@ const productosFijos = [
 
 const NaturalezaPage = () => {
   const [productos, setProductos] = useState(productosFijos); // Productos iniciales
-  const [carrito, setCarrito] = useState([]);
   const { setProductoSeleccionado } = useProducto();
+  const socket = new WebSocket('ws://127.0.0.1:8000/ws/chat/');
+
+socket.onopen = function () {
+  console.log('WebSocket conectado');
+};
+
+// Manejo de errores en caso de que el WebSocket se desconecte
+socket.onclose = function () {
+  console.log('WebSocket desconectado');
+};
+
 
 
   const agregarAlCarrito = (producto) => {
-    setCarrito([...carrito, producto]);
+    // Actualiza el estado del carrito
+
+  
+    // Envía el producto al WebSocket en formato JSON
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(JSON.stringify({mensaje: { producto }}));
+      console.log('Producto agregado al carrito:' + JSON.stringify(producto));
+    } else {
+      console.error('El WebSocket no está conectado.');
+    }
   };
 
  
@@ -94,16 +113,7 @@ const NaturalezaPage = () => {
         </div>
       </div>
 
-      <div className="carrito">
-        <h3>Carrito de Compras</h3>
-        <ul>
-          {carrito.map((item, index) => (
-            <li key={index}>
-              {item.nombre} - ${item.precio.toFixed(2)}
-            </li>
-          ))}
-        </ul>
-      </div>
+      
     </div>
   );
 };

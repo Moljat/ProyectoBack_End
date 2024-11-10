@@ -53,6 +53,7 @@ const VerProductoPage = () => {
       }
     } catch (error) {
       console.error('Error al hacer la llamada PATCH:', error);
+      console.log(IsUpdating);
     } finally {
       setIsUpdating(false);
     }
