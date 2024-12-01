@@ -22,7 +22,7 @@ const Login = ({ setIsAuthenticated }) => {
   };
 
   return (
-    <div>
+    <div className="login-container">
       <h2>Iniciar Sesión</h2>
       <form onSubmit={handleSubmit}>
         <div>
@@ -45,6 +45,12 @@ const Login = ({ setIsAuthenticated }) => {
         </div>
         <button type="submit">Iniciar Sesión</button>
       </form>
+      <button
+        className="admin-btn"
+        onClick={() => navigate("/admin-usuarios")}
+      >
+        Administración de Usuarios
+      </button>
     </div>
   );
 };
