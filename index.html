@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Gateway - Interacción con Usuarios y Productos</title>
+    <script>
+        let accessToken = '';  // Variable global para almacenar el token de acceso
+
+        // Función para hacer login y obtener el access token
+        async function login() {
+            const correo = document.getElementById("loginCorreo").value;
+            const contrasena = document.getElementById("loginContrasena").value;
+
+            const loginData = {
+                correo: correo,
+                contrasena: contrasena
+            };
+
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(loginData)
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    accessToken = data.accessToken;  // Almacenar el token de acceso
+                    document.getElementById('loginMessage').innerText = 'Login exitoso';
+                    document.getElementById('token').value = accessToken;  // Mostrar el token en el input
+                } else {
+                    document.getElementById('loginMessage').innerText = data.error || 'Error en el login';
+                }
+            } catch (error) {
+                console.error("Error en el login:", error);
+                document.getElementById('loginMessage').innerText = 'Error en el login';
+            }
+        }
+
+        async function getUsers() {
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/users', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('usersList').innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al obtener usuarios:", error);
+            }
+        }
+
+        async function addUser() {
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            const email = document.getElementById("email").value;
+
+            const userData = {
+                usuario: username,
+                contrasena: password,
+                correo: email
+            };
+
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/users', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                const data = await response.json();
+                document.getElementById('responseMessage').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al agregar usuario:", error);
+            }
+        }
+
+        async function updateUser() {
+            const userId = document.getElementById("userId").value;
+            const username = document.getElementById("updateUsername").value;
+            const password = document.getElementById("updatePassword").value;
+            const email = document.getElementById("updateEmail").value;
+
+            const userData = {
+                usuario: username,
+                contrasena: password,
+                correo: email
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8001/api/v1/users/${userId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(userData)
+                });
+                const data = await response.json();
+                document.getElementById('responseMessage').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al modificar usuario:", error);
+            }
+        }
+
+        async function deleteUser() {
+            const userId = document.getElementById("deleteUserId").value;
+
+            try {
+                const response = await fetch(`http://localhost:8001/api/v1/users/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('responseMessage').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al eliminar usuario:", error);
+            }
+        }
+
+        async function getProducts() {
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/productos', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('productsList').innerHTML = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al obtener productos:", error);
+            }
+        }
+
+        async function addProduct() {
+            const name = document.getElementById("productName").value;
+            const description = document.getElementById("productDescription").value;
+            const price = document.getElementById("productPrice").value;
+
+            const productData = {
+                nombre: name,
+                descripcion: description,
+                price: parseFloat(price)
+            };
+
+            try {
+                const response = await fetch('http://localhost:8001/api/v1/productos', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+                const data = await response.json();
+                document.getElementById('responseMessage').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al agregar producto:", error);
+            }
+        }
+
+        async function updateProduct() {
+            const productId = document.getElementById("productId").value;
+            const name = document.getElementById("updateProductName").value;
+            const description = document.getElementById("updateProductDescription").value;
+            const price = document.getElementById("updateProductPrice").value;
+
+            const productData = {
+                nombre: name,
+                descripcion: description,
+                price: parseFloat(price)
+            };
+
+            try {
+                const response = await fetch(`http://localhost:8001/api/v1/productos/${productId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(productData)
+                });
+                const data = await response.json();
+                document.getElementById('responseMessage').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al modificar producto:", error);
+            }
+        }
+
+        async function deleteProduct() {
+            const productId = document.getElementById("deleteProductId").value;
+
+            try {
+                const response = await fetch(`http://localhost:8001/api/v1/productos/${productId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+                document.getElementById('responseMessage').innerText = JSON.stringify(data, null, 2);
+            } catch (error) {
+                console.error("Error al eliminar producto:", error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>Login</h2>
+    <input type="email" id="loginCorreo" placeholder="Correo">
+    <input type="password" id="loginContrasena" placeholder="Contraseña">
+    <button onclick="login()">Iniciar sesión</button>
+    <p id="loginMessage"></p>
+    <input type="text" id="token" readonly placeholder="Token de acceso" style="width: 300px;">
+
+    <h2>Usuarios</h2>
+    <button onclick="getUsers()">Obtener usuarios</button>
+    <pre id="usersList"></pre>
+
+    <h3>Agregar usuario</h3>
+    <input type="text" id="username" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <input type="email" id="email" placeholder="Correo">
+    <button onclick="addUser()">Agregar usuario</button>
+
+    <h3>Modificar usuario</h3>
+    <input type="text" id="userId" placeholder="ID del usuario">
+    <input type="text" id="updateUsername" placeholder="Nuevo nombre de usuario">
+    <input type="password" id="updatePassword" placeholder="Nueva contraseña">
+    <input type="email" id="updateEmail" placeholder="Nuevo correo">
+    <button onclick="updateUser()">Modificar usuario</button>
+
+    <h3>Eliminar usuario</h3>
+    <input type="text" id="deleteUserId" placeholder="ID del usuario">
+    <button onclick="deleteUser()">Eliminar usuario</button>
+
+    <h2>Productos</h2>
+    <button onclick="getProducts()">Obtener productos</button>
+    <pre id="productsList"></pre>
+
+    <h3>Agregar producto</h3>
+    <input type="text" id="productName" placeholder="Nombre del producto">
+    <input type="text" id="productDescription" placeholder="Descripción">
+    <input type="number" id="productPrice" placeholder="Precio">
+    <button onclick="addProduct()">Agregar producto</button>
+
+    <h3>Modificar producto</h3>
+    <input type="text" id="productId" placeholder="ID del producto">
+    <input type="text" id="updateProductName" placeholder="Nuevo nombre">
+    <input type="text" id="updateProductDescription" placeholder="Nueva descripción">
+    <input type="number" id="updateProductPrice" placeholder="Nuevo precio">
+    <button onclick="updateProduct()">Modificar producto</button>
+
+    <h3>Eliminar producto</h3>
+    <input type="text" id="deleteProductId" placeholder="ID del producto">
+    <button onclick="deleteProduct()">Eliminar producto</button>
+
+    <h3>Respuesta</h3>
+    <pre id="responseMessage"></pre>
+</body>
+</html>
