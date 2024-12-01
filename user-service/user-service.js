@@ -5,13 +5,11 @@ const { PrismaClient } = require('@prisma/client');
 require('dotenv').config();
 const cors = require('cors');
 
-
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(express.json());
 app.use(cors());
-
 
 // Generar tokens
 const generateTokens = (user) => {
@@ -140,37 +138,24 @@ app.get('/api/v1/users/:id', async (req, res) => {
 app.post('/api/v1/login', async (req, res) => {
     const { correo, contrasena } = req.body;
 
-    // Verificar que ambos campos estén presentes
     if (!correo || !contrasena) {
         return res.status(400).json({ error: 'Correo y contraseña son obligatorios' });
     }
 
     try {
-        // Buscar el usuario por correo
         const user = await prisma.usuarios.findUnique({
             where: { correo },
         });
 
-        // Verificar si el usuario existe
-        if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
-        }
-
-        // Comparar la contraseña proporcionada con la almacenada en la base de datos
-        const validPassword = await bcrypt.compare(contrasena, user.contrasena);
-        if (!validPassword) {
+        if (!user || !(await bcrypt.compare(contrasena, user.contrasena))) {
             return res.status(401).json({ error: 'Credenciales inválidas' });
         }
 
-        // Generar tokens (access y refresh token)
         const tokens = generateTokens(user);
-
-        // Enviar los tokens como respuesta
         res.json(tokens);
     } catch (error) {
         console.error('Error en el inicio de sesión:', error);
-        // Enviar detalles del error para diagnóstico
-        res.status(500).json({ error: 'Error en el inicio de sesión', details: error.message });
+        res.status(500).json({ error: 'Error en el inicio de sesión' });
     }
 });
 
