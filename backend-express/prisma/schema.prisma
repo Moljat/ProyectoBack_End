@@ -18,6 +18,6 @@ model Cubitos{
   nombre String
   descripcion String
   price Decimal 
-  image Bytes
+  image Bytes //Imagenes en binario
 
 }

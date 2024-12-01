@@ -31,7 +31,7 @@ const writeDataToFile = (data) => {
 };
 /**************************************************************************************** */
 // (GET) Consulta de todos los elementos
-app.get('/api/productos', async(req, res) => {
+app.get('/api/v1/productos', async(req, res) => {
     try {
         //Uso del ORM para  hace un query  a todos  los datos  de la tabla
         const items = await prisma.cubitos.findMany();
@@ -47,7 +47,7 @@ app.get('/api/productos', async(req, res) => {
 });
 
 // (GET) Consulta de un sólo elemento a través de un id
-app.get('/api/productos/:id', async (req, res) => {
+app.get('/api/v1/productos:id', async (req, res) => {
     const {id} = req.params;
     try {
         //ORM para query de un solo elemento
@@ -72,7 +72,7 @@ app.get('/api/productos/:id', async (req, res) => {
 });
 
 // (POST) Agregar un elemento al JSON
-app.post('/api/producto-nuevo', async (req, res) => {
+app.post('/api/v1/productos', async (req, res) => {
    // Campos para insertar 
    const { nombre, descripcion, price } = req.body;
 
@@ -100,11 +100,11 @@ app.post('/api/producto-nuevo', async (req, res) => {
 
 
 // (PATCH) Modificar un sólo elemento a través de un id
-app.patch('/api/productos/:id', async (req, res) => {
+app.patch('/api/v1/productos:id', async (req, res) => {
     const {id} = req.params;
 
     //Cmapos para recibir la info actualizado
-    const {nombre, descripcion,precio} = req.body;
+    const {nombre, descripcion,price} = req.body;
 
 
     try {
@@ -119,7 +119,7 @@ app.patch('/api/productos/:id', async (req, res) => {
                 //Es decir solo modifica lo que se cmabio 
                 ...(nombre !== undefined && {nombre}),
                 ...(descripcion !== undefined && {descripcion}),
-                ...(precio !== undefined && {precio}),
+                ...(price !== undefined && {price}),
             },
         });
 
@@ -132,7 +132,7 @@ app.patch('/api/productos/:id', async (req, res) => {
 });
 
 // (DELETE) Borrar un elemento a través de un id
-app.delete('/api/productos/:id', async (req, res) => {
+app.delete('/api/v1/productos:id', async (req, res) => {
     const {id} = req.params;
     try {
         await prisma.cubitos.delete({
