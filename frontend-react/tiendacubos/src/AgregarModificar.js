@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+
 const NaturalezaPage = () => {
   // Estado para el nuevo producto
   const [nuevoProducto, setNuevoProducto] = useState({
@@ -32,7 +33,7 @@ const NaturalezaPage = () => {
   // Función para agregar un nuevo producto
   const addNuevoProducto = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/v1/producto-nuevo', {
+      const response = await fetch('http://localhost:8001/api/v1/productos', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -65,6 +66,7 @@ const NaturalezaPage = () => {
     >
       <header className="header">
         <h1>TIENDA DE CUBOS</h1>
+        
       </header>
 
       <div className="content">

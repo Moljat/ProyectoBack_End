@@ -45,7 +45,7 @@ const NaturalezaPage = () => {
   useEffect(() => {
     async function fetchProductos() {
       try {
-        const response = await fetch('http://localhost:3001/api/v1/productos');
+        const response = await fetch('http://localhost:8001/api/v1/productos');
         const nuevosProductos = await response.json();
         console.log('Productos de la API:', nuevosProductos);
 

@@ -17,7 +17,7 @@ const VerProductoPage = () => {
     
     const fetchProducto = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/v1/productos/${id}`);
+        const response = await fetch(`http://localhost:8001/api/v1/productos/${id}`);
         const data = await response.json();
         setProducto(data);
         console.log('Producto:', data); 
@@ -33,7 +33,7 @@ const VerProductoPage = () => {
     setIsUpdating(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/v1/productos/${producto.id}`, {
+      const response = await fetch(`http://localhost:8001/api/v1/productos/${producto.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const VerProductoPage = () => {
 
   const eliminarProducto = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/v1/productos/${producto.id}`, {
+      const response = await fetch(`http://localhost:8001/api/v1/productos/${producto.id}`, {
         method: 'DELETE',
       });
 

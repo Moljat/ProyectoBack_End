@@ -93,7 +93,7 @@ app.get('/api/v1/productos/:id', async (req, res) => {
 
 
 // (POST) Agregar un elemento al JSON
-app.post('/api/v1/producto-nuevo', async (req, res) => {
+app.post('/api/v1/productos', async (req, res) => {
     const { nombre, descripcion, price } = req.body;
   
     try {

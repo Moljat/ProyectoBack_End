@@ -11,17 +11,18 @@ import AdminUsuarios from "./AdminUsuarios";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
+  // Función para verificar si el usuario está autenticado
   const checkAuth = () => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setIsAuthenticated(true);
+    const token = localStorage.getItem("accessToken"); // Obtenemos el token de acceso
+    if (token) {
+      setIsAuthenticated(true); // Si hay token, el usuario está autenticado
     } else {
-      setIsAuthenticated(false);
+      setIsAuthenticated(false); // Si no hay token, no está autenticado
     }
   };
 
   useEffect(() => {
-    checkAuth();
+    checkAuth(); // Verificamos la autenticación cuando la app se cargue
   }, []);
 
   return (
@@ -34,7 +35,7 @@ function App() {
             element={<Login setIsAuthenticated={setIsAuthenticated} />}
           />
 
-          {/* Página de administración de usuarios */}
+          {/* Página de administración de usuarios (Ruta protegida) */}
           <Route
             path="/admin-usuarios"
             element={
@@ -45,29 +46,21 @@ function App() {
           {/* Ruta principal protegida */}
           <Route
             path="/"
-            element={
-              isAuthenticated ? <NaturalezaPage /> : <Navigate to="/login" />
-            }
+            element={isAuthenticated ? <NaturalezaPage /> : <Navigate to="/login" />}
           />
 
           {/* Rutas protegidas */}
           <Route
             path="/agregar-modificar"
-            element={
-              isAuthenticated ? <AgregarModificar /> : <Navigate to="/login" />
-            }
+            element={isAuthenticated ? <AgregarModificar /> : <Navigate to="/login" />}
           />
           <Route
             path="/VerProducto"
-            element={
-              isAuthenticated ? <VerProducto /> : <Navigate to="/login" />
-            }
+            element={isAuthenticated ? <VerProducto /> : <Navigate to="/login" />}
           />
           <Route
             path="/CarritoCompras"
-            element={
-              isAuthenticated ? <CarritoCompras /> : <Navigate to="/login" />
-            }
+            element={isAuthenticated ? <CarritoCompras /> : <Navigate to="/login" />}
           />
         </Routes>
       </Router>

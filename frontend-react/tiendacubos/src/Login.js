@@ -7,17 +7,33 @@ const Login = ({ setIsAuthenticated }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simula la autenticación
-    if (email === "biomara76@gmail.com" && password === "123456") {
-      localStorage.setItem("user", JSON.stringify({ email })); // Guarda sesión
-      setIsAuthenticated(true); // Establece que el usuario está autenticado
-      alert("Inicio de sesión exitoso");
-      navigate("/"); // Redirige a NaturalezaPage
-    } else {
-      alert("Credenciales incorrectas");
+    const loginData = { correo: email, contrasena: password };
+
+    try {
+      const response = await fetch("http://localhost:8001/api/v1/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        localStorage.setItem("accessToken", data.accessToken); // Almacenar el token de acceso
+        localStorage.setItem("refreshToken", data.refreshToken); // Almacenar el token de refresco
+        setIsAuthenticated(true); // Establecer que el usuario está autenticado
+        alert("Inicio de sesión exitoso");
+        navigate("/"); // Redirigir a la página principal
+      } else {
+        alert(data.error || "Credenciales incorrectas");
+      }
+    } catch (error) {
+      console.error("Error en el login:", error);
+      alert("Error al realizar el login");
     }
   };
 

@@ -64,13 +64,16 @@ app.patch('/api/v1/users/:id', async (req, res) => {
             return res.status(404).json({ error: 'Usuario no encontrado' });
         }
 
+        // Si hay una nueva contraseña, la ciframos
+        const updatedData = {
+            usuario: usuario || user.usuario,
+            correo: correo || user.correo,
+            contrasena: contrasena ? await bcrypt.hash(contrasena, 10) : user.contrasena, // Si la contraseña no se actualiza, no la modificamos
+        };
+
         const updatedUser = await prisma.usuarios.update({
             where: { id: parseInt(id) },
-            data: {
-                usuario: usuario || user.usuario,
-                contrasena: contrasena ? await bcrypt.hash(contrasena, 10) : user.contrasena,
-                correo: correo || user.correo,
-            },
+            data: updatedData,
         });
 
         res.json({ message: 'Usuario actualizado', user: updatedUser });
@@ -168,19 +171,11 @@ app.post('/api/v1/token/refresh', (req, res) => {
     }
 
     jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, decoded) => {
-        if (err) {
-            return res.status(403).json({ error: 'Refresh token inválido' });
-        }
-
-        const accessToken = jwt.sign(
-            { userId: decoded.userId },
-            process.env.ACCESS_TOKEN_SECRET,
-            { expiresIn: '15m' }
-        );
-        res.json({ accessToken });
+        if (err) return res.status(403).json({ error: 'Refresh token inválido' });
+        res.json({ accessToken: jwt.sign({ userId: decoded.userId }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' }) });
     });
 });
-
+      
 // Verificar token
 app.post('/api/v1/token/access', (req, res) => {
     const { accessToken } = req.body;
