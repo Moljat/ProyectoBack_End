@@ -17,9 +17,10 @@ const VerProductoPage = () => {
     
     const fetchProducto = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/productos/${id}`);
+        const response = await fetch(`http://localhost:3001/api/v1/productos/${id}`);
         const data = await response.json();
         setProducto(data);
+        console.log('Producto:', data); 
       } catch (error) {
         console.error('Error al obtener el producto:', error);
       }
@@ -32,14 +33,14 @@ const VerProductoPage = () => {
     setIsUpdating(true);
 
     try {
-      const response = await fetch(`http://localhost:3001/api/productos/${producto.id}`, {
+      const response = await fetch(`http://localhost:3001/api/v1/productos/${producto.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           nombre: producto.nombre,
-          precio: parseFloat(producto.precio),
+          price: parseFloat(producto.price),
           descripcion: producto.descripcion,
         }),
       });
@@ -61,7 +62,7 @@ const VerProductoPage = () => {
 
   const eliminarProducto = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/api/productos/${producto.id}`, {
+      const response = await fetch(`http://localhost:3001/api/v1/productos/${producto.id}`, {
         method: 'DELETE',
       });
 
@@ -94,7 +95,9 @@ const VerProductoPage = () => {
  
 
   return (
-    <div className="producto-detalle">
+    <div className="producto-detalle" style={{
+      paddingTop: '100px',
+    }}>
       
          <header className="header">
                 <h1>TIENDA DE CUBOS</h1>
@@ -126,7 +129,7 @@ const VerProductoPage = () => {
         <input
           type="number" 
           name="precio"
-          value={producto.precio}
+          value={producto.price}
           onChange={handleInputChange}
         />
       </label>

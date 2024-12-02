@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+"use client";
+
+import { useState } from "react";
 
 const NaturalezaPage = () => {
   // Estado para el nuevo producto
   const [nuevoProducto, setNuevoProducto] = useState({
-    nombre: '',
-    descripcion: '',
-    precio: 0.0,
-    imagen: '',
+    nombre: "",
+    descripcion: "",
+    precio: "",
+    imagen: null,
   });
 
-  // Función para actualizar el estado del nuevo producto
+  // Función para manejar los cambios en los inputs de texto
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNuevoProducto({
@@ -18,52 +20,57 @@ const NaturalezaPage = () => {
     });
   };
 
-  // Función para agregar el producto (llama a la API)
+  // Función para manejar la selección de imagen
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setNuevoProducto({
+      ...nuevoProducto,
+      imagen: file,
+    });
+  };
+
+  // Función para agregar un nuevo producto
   const addNuevoProducto = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/producto-nuevo', {
+      const response = await fetch('http://localhost:3001/api/v1/producto-nuevo', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          id : 0,
           nombre: nuevoProducto.nombre,
           descripcion: nuevoProducto.descripcion,
-          precio: parseFloat(nuevoProducto.precio),
-           // Imagen por defecto
-        }), // Solo enviamos los datos del nuevo producto
+          price: parseFloat(nuevoProducto.precio),
+        }),
       });
-
+  
       if (!response.ok) {
         throw new Error('Error al agregar el producto');
       }
-
+  
       const productoAgregado = await response.json();
       console.log('Producto agregado:', productoAgregado);
-      // Opcional: actualizar el estado o hacer algo con el nuevo producto agregado
     } catch (error) {
       console.error('Error al hacer la llamada POST:', error);
     }
   };
+  
 
   return (
-    <div className="producto-detalle">
+    <div
+      className="producto-detalle"
+      style={{
+        paddingTop: "100px",
+      }}
+    >
       <header className="header">
         <h1>TIENDA DE CUBOS</h1>
       </header>
 
-      {/* Contenido */}
       <div className="content">
-        {/* Imagen del cubo */}
-        <div className="cube-image">
-          <div className="cube"></div>
-        </div>
-
-        {/* Detalles del cubo */}
         <div className="cube-details">
           <label className="detail-item">
-            <strong>Nombre del bloque</strong>
+            <strong>Nombre del producto</strong>
             <input
               type="text"
               name="nombre"
@@ -85,7 +92,7 @@ const NaturalezaPage = () => {
           </label>
 
           <label className="detail-item">
-            <strong>Descripción del bloque</strong>
+            <strong>Descripción</strong>
             <input
               type="text"
               name="descripcion"
@@ -94,11 +101,15 @@ const NaturalezaPage = () => {
               placeholder="Descripción del producto"
             />
           </label>
+
+          <label className="detail-item">
+            <strong>Imagen</strong>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+          </label>
         </div>
       </div>
 
-      {/* Botón de actualización */}
-      <div >
+      <div>
         <button className="button modify-button" onClick={addNuevoProducto}>
           Agregar Producto
         </button>
@@ -108,4 +119,3 @@ const NaturalezaPage = () => {
 };
 
 export default NaturalezaPage;
-
